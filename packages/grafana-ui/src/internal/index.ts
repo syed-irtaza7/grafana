@@ -126,5 +126,4 @@ export { DRAWER_INSIDE_ATTRIBUTE } from '../components/Drawer/Drawer';
 
 // Core-only: lets Grafana core build CodeMirror editors that accept raw extensions.
 export { loadCodeMirrorSetup } from '../components/CodeMirror/loadCodeMirrorSetup';
-export type { CodeMirrorSetup } from '../components/CodeMirror/useCodeMirrorSetup';
 export type { CodeMirrorEditorSetupProps, CodeMirrorExtension } from '../components/CodeMirror/types';

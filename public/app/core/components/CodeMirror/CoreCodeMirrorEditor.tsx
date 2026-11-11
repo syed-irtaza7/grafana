@@ -1,4 +1,4 @@
-import { lazy, type ReactNode, Suspense } from 'react';
+import { lazy, memo, type ReactNode, Suspense } from 'react';
 
 import { t } from '@grafana/i18n';
 import { ErrorBoundaryAlert, LoadingPlaceholder } from '@grafana/ui';
@@ -9,12 +9,25 @@ export interface CoreCodeMirrorEditorProps extends CodeMirrorEditorSetupProps {
   loadingFallback?: ReactNode;
 }
 
-const Editor = lazy(() =>
-  Promise.all([
+const Editor = lazy(async () => {
+  const [useCodeMirrorSetup, { default: CodeMirror }] = await Promise.all([
     loadCodeMirrorSetup(),
-    import(/* webpackChunkName: "core-codemirror-editor" */ './CoreCodeMirrorEditorImplementation'),
-  ]).then(([useCodeMirrorSetup, module]) => ({ default: module.createCoreCodeMirrorEditor(useCodeMirrorSetup) }))
-);
+    import(/* webpackChunkName: "core-codemirror-editor" */ '@uiw/react-codemirror'),
+  ]);
+
+  return {
+    default: memo(function CoreCodeMirrorEditorImplementation(props: CodeMirrorEditorSetupProps) {
+      const { ref, props: editorProps, languageAlert } = useCodeMirrorSetup(props);
+
+      return (
+        <>
+          {languageAlert}
+          <CodeMirror ref={ref} {...editorProps} />
+        </>
+      );
+    }),
+  };
+});
 
 /**
  * Grafana's CodeMirror editor plus raw CodeMirror extensions and theme extensions,

@@ -254,9 +254,8 @@ export interface CodeMirrorEditorProps {
   variableSuggestions?: readonly VariableSuggestion[];
   /**
    * Customizes how `variableSuggestions` open, what they insert, and how they
-   * are listed. Can be passed inline: the editor calls the latest
-   * `getInsertText` and `toDisplay`, and only reconfigures when `separators`
-   * change.
+   * are listed. Define the options outside the component or memoize them: a new
+   * object reconfigures the editor.
    */
   variableCompletionOptions?: VariableCompletionOptions;
   /**
